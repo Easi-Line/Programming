@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Victory Fellowship</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- <header>
+        <h1>Victory Fellowship</h1>
+    </header> -->
+    <div class="container">
+        <!-- Sign Up Form -->
+        <form class="fellowshipForm" id="signUpForm">
+            <h2>Sign Up</h2>
+            <label for="signup-name">Full Name</label>
+            <input type="text" id="signup-name" name="signup-name" required>
+
+            <label for="signup-email">Email</label>
+            <input type="email" id="signup-email" required>
+
+            <div class="passwordSection">
+                <label for="signup-password">Password</label>
+                <input type="password" id="signup-password" minlength="8" maxlength="15" placeholder="password must be 8-15 characters long" required>
+                <h4 class="resetPassword" id="resetPassword">Forgot password?</h4>
+            </div>
+
+            <label for="signup-position">Position</label>
+            <select class="position" id="signup-position" required>
+                <option value="">Select Position</option>
+                <option value="fLeader">Fellowship Leader</option>
+                <option value="cLeader">Cell Leader</option>
+                <option value="BSCT">BSC Teacher</option>
+                <option value="member">Member</option>
+            </select>
+
+            <label for="cell">Cell</label>
+            <select id="cell-name" required>
+                <option value="">Select Cell</option>
+                <option value="01">Cell 1 (Passion Cell)</option>
+                <option value="02">Cell 2 (Mighty Cell)</option>
+                <option value="03">Cell 3 ()</option>
+                <option value="04">Cell 4 ()</option>
+                <option value="05">Cell 5 ()</option>
+                <option value="06">Cell 6 ()</option>
+                <option value="07">Cell 7 ()</option>
+            </select>
+
+            <label for="signup-dateOfBirth">When is your birthday?</label>
+            <select id="month" required>
+                <option value="">Select Month</option>
+                <option value="01">January</option>
+                <option value="02">February</option>
+                <option value="03">March</option>
+                <option value="04">April</option>
+                <option value="05">May</option>
+                <option value="06">June</option>
+                <option value="07">July</option>
+                <option value="08">August</option>
+                <option value="09">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+            </select>
+
+            <input type="text" id="day" placeholder="Day (DD)" required>
+
+            <button class="signUp" id="signUp" type="submit">Sign Up</button>
+            <h3 class="signInPrompt">Already have an account? <span id="signInLink"> <a href="signIn.html">Sign In</span></a> </h3>
+        </form>
+        
+        <div id="auth-message"></div>
+        
+    </div>
+    
+</body>
+</html>

@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Victory Fellowship - Partnership Records Detailed</title>
+  <link rel="stylesheet" href="records.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f9f9fb;
+      color: #4b0082;
+      margin: 0; padding: 0;
+    }
+    .container {
+      max-width: 960px;
+      margin: auto;
+      padding: 20px;
+    }
+    header, footer {
+      background: #8e2de2;
+      color: white;
+      padding: 15px 0;
+      text-align: center;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    nav ul {
+      display: flex;
+      justify-content: center;
+      list-style: none;
+      padding: 0;
+      margin: 10px 0 0;
+      gap: 20px;
+    }
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 5px 10px;
+      border-radius: 4px;
+      transition: background 0.3s;
+    }
+    nav ul li a.active,
+    nav ul li a:hover {
+      background: #5b0688;
+    }
+    h2 {
+      margin-bottom: 15px;
+      font-weight: 700;
+    }
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 20px;
+      align-items: center;
+    }
+    .filters label {
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .filters select {
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      background: #f8f8f8;
+      color: #4b0082;
+      font-size: 1rem;
+      min-width: 140px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 0 12px rgb(142 45 226 / 0.3);
+    }
+    th, td {
+      padding: 12px 15px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+    th {
+      background-color: #8e2de2;
+      color: white;
+      font-weight: 700;
+    }
+    tbody tr:hover {
+      background-color: #f3e8ff;
+    }
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+    canvas {
+      margin-top: 30px;
+      max-width: 100%;
+      height: 300px !important;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgb(142 45 226 / 0.25);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <h1>Victory Fellowship</h1>
+    <nav>
+      <ul>
+        <li><a href="home.html">Home</a></li>
+        <li><a href="announcements.html">Announcements</a></li>
+        <li><a href="meetings.html">Meetings</a></li>
+        <li><a href="cellList.html">Cells</a></li>
+        <li><a href="records.html" class="active">Records</a></li>
+        <li><a href="profile.html">Profile</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <section aria-labelledby="section-title" class="partnership-records-detailed">
+    <h2 id="section-title">Partnership Records - Detailed View</h2>
+
+    <form class="filters" aria-label="Filter partnership records">
+      <div>
+        <label for="yearSelect">Year:</label><br />
+        <select id="yearSelect" name="year"></select>
+      </div>
+
+      <div>
+        <label for="timeframeSelect">View by:</label><br />
+        <select id="timeframeSelect" name="timeframe">
+          <option value="week">Week</option>
+          <option value="month" selected>Month</option>
+          <option value="year">Year</option>
+        </select>
+      </div>
+
+      <div id="periodWrapper">
+        <label id="periodLabel" for="periodSelect">Select Month:</label><br />
+        <select id="periodSelect" name="period"></select>
+      </div>
+    </form>
+
+    <table class="partnership-table" aria-describedby="tableDesc">
+      <caption id="tableDesc">Shows partnership records for selected period</caption>
+      <thead>
+        <tr>
+          <th scope="col">Date</th>
+          <th scope="col">Amount (GHC)</th>
+          <th scope="col">Description</th>
+        </tr>
+      </thead>
+      <tbody id="partnershipBody">
+        <!-- Dynamic records here -->
+      </tbody>
+    </table>
+
+    <canvas id="partnershipChart" aria-label="Partnership chart" role="img"></canvas>
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    <p>&copy; 2025 Victory Fellowship. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+  (() => {
+    // Cache DOM elements
+    const yearSelect = document.getElementById('yearSelect');
+    const timeframeSelect = document.getElementById('timeframeSelect');
+    const periodSelect = document.getElementById('periodSelect');
+    const periodLabel = document.getElementById('periodLabel');
+    const periodWrapper = document.getElementById('periodWrapper');
+    const tbody = document.getElementById('partnershipBody');
+    const ctx = document.getElementById('partnershipChart').getContext('2d');
+
+    // Partnership data example
+    const partnershipData = {
+      "2025-jan": [
+        { date: "Jan 3", amount: 200, desc: "Tithe" },
+        { date: "Jan 15", amount: 150, desc: "Offering" },
+        { date: "Jan 20", amount: 300, desc: "Special" }
+      ],
+      "2025-feb": [
+        { date: "Feb 1", amount: 100, desc: "Tithe" },
+        { date: "Feb 12", amount: 250, desc: "Offering" }
+      ],
+      "2025-week-1": [
+        { date: "Jan 1", amount: 100, desc: "Tithe" },
+        { date: "Jan 3", amount: 50, desc: "Offering" }
+      ],
+      "2025-week-2": [
+        { date: "Jan 8", amount: 150, desc: "Special" },
+        { date: "Jan 10", amount: 200, desc: "Tithe" }
+      ],
+      "2025-all": []
+    };
+
+    let chart = null;
+
+    // Helper to capitalize text
+    const capitalize = str => str.charAt(0).toUpperCase() + str.slice(1);
+
+    // Populate year dropdown (last 5 years)
+    function populateYears() {
+      const currentYear = new Date().getFullYear();
+      for (let y = currentYear; y >= currentYear - 4; y--) {
+        const option = document.createElement('option');
+        option.value = y;
+        option.textContent = y;
+        yearSelect.appendChild(option);
+      }
+      yearSelect.value = currentYear;
+    }
+
+    // Populate period dropdown based on timeframe
+    function populatePeriods() {
+      periodSelect.innerHTML = '';
+      const timeframe = timeframeSelect.value;
+      const year = yearSelect.value;
+
+      if (timeframe === 'month') {
+        periodLabel.textContent = 'Select Month:';
+        periodWrapper.style.display = 'block';
+        const months = [
+          { short: "jan", full: "January" },
+          { short: "feb", full: "February" },
+          { short: "mar", full: "March" },
+          { short: "apr", full: "April" },
+          { short: "may", full: "May" },
+          { short: "jun", full: "June" },
+          { short: "jul", full: "July" },
+          { short: "aug", full: "August" },
+          { short: "sep", full: "September" },
+          { short: "oct", full: "October" },
+          { short: "nov", full: "November" },
+          { short: "dec", full: "December" },
+        ];
+
+        months.forEach(m => {
+          const option = document.createElement('option');
+          option.value = m.short;
+          option.textContent = m.full;
+          periodSelect.appendChild(option);
+        });
+
+        periodSelect.value = 'jan';
+
+      } else if (timeframe === 'week') {
+        periodLabel.textContent = 'Select Week:';
+        periodWrapper.style.display = 'block';
+        for (let w = 1; w <= 52; w++) {
+          const option = document.createElement('option');
+          option.value = `week-${w}`;
+          option.textContent = `Week ${w}`;
+          periodSelect.appendChild(option);
+        }
+        periodSelect.value = 'week-1';
+
+      } else if (timeframe === 'year') {
+        periodWrapper.style.display = 'none';
+      }
+    }
+
+    // Render records in table and chart
+    function renderPartnership() {
+      const year = yearSelect.value;
+      const timeframe = timeframeSelect.value;
+      let key = '';
+
+      if (timeframe === 'year') {
+        renderYearlySummary(year);
+        return;
+      } else if (timeframe === 'month') {
+        key = `${year}-${periodSelect.value}`;
+      } else if (timeframe === 'week') {
+        key = `${year}-${periodSelect.value}`;
+      }
+
+      const records = partnershipData[key] || [];
+
+      // Render table
+      tbody.innerHTML = '';
+      if (records.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; font-style: italic;">No records available for selected period.</td></tr>`;
+      } else {
+        records.forEach(({ date, amount, desc }) => {
+          tbody.innerHTML += `
+            <tr>
+              <td>${date}</td>
+              <td>GHC ${amount}</td>
+              <td>${desc}</td>
+            </tr>`;
+        });
+      }
+
+      // Prepare chart data
+      const labels = records.map(r => r.date);
+      const dataValues = records.map(r => r.amount);
+
+      updateChart(labels, dataValues, `Partnership - ${capitalize(timeframe)} - ${periodSelect.value} ${year}`);
+    }
+
+    // Render yearly summary with monthly totals chart
+    function renderYearlySummary(year) {
+      const months = [
+        "jan", "feb", "mar", "apr", "may", "jun",
+        "jul", "aug", "sep", "oct", "nov", "dec"
+      ];
+      const monthLabels = [
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+      ];
+
+      const monthlyTotals = months.map(m => {
+        const recs = partnershipData[`${year}-${m}`] || [];
+        return recs.reduce((sum, r) => sum + r.amount, 0);
+      });
+
+      // Table with summary message
+      tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; font-style: italic;">
+        Showing yearly summary for ${year}. Select Week or Month to view detailed records.
+      </td></tr>`;
+
+      updateChart(monthLabels, monthlyTotals, `Partnership Amounts in ${year}`, 'bar', '#8e2de2');
+    }
+
+    // Create or update chart instance
+    function updateChart(labels, data, label, type = 'bar', color = '#8e2de2') {
+      if (chart) chart.destroy();
+
+      chart = new Chart(ctx, {
+        type,
+        data: {
+          labels,
+          datasets: [{
+            label,
+            data,
+            backgroundColor: color,
+            borderRadius: 10,
+            barPercentage: 0.6
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                callback: val => `GHC ${val}`
+              }
+            }
+          },
+          plugins: {
+            legend: { display: true, labels: { color: '#4b0082', font: { weight: '700' } } }
+          }
+        }
+      });
+    }
+
+    // Event Listeners
+    yearSelect.addEventListener('change', () => {
+      populatePeriods();
+      renderPartnership();
+    });
+
+    timeframeSelect.addEventListener('change', () => {
+      populatePeriods();
+      renderPartnership();
+    });
+
+    periodSelect.addEventListener('change', renderPartnership);
+
+    // Initialize page
+    function init() {
+      populateYears();
+      populatePeriods();
+      renderPartnership();
+    }
+
+    init();
+
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,172 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: 100%;
+  list-style: none;
+  text-decoration: none;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100vh;
+  /* gap: 1rem;  */
+}
+
+/* Header style */
+.header {
+  display: flex;
+  justify-content: space-between;
+  justify-items: center;
+  align-items: center;
+  padding: 0 100px;
+  /* padding-left: 70px; */
+  background-color: #05668D;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-weight: bold;
+}
+
+header h1 {
+  padding: 20px;
+  border-radius: 5px;
+  /* background-color: gray; */
+}
+
+/* footer style */
+.footer {
+  display: flex;
+  justify-content: space-around;
+  background-color: #222;
+  color: #fff;
+  text-align: center;
+  padding: 1rem 2rem;
+  font-size: 0.9rem;
+}
+
+/* nav style */
+.nav-elements {
+  display: flex;
+  justify-content: space-between;
+  gap: 50px;
+  font-size: 2.4ex;
+}
+
+.brand-logo {
+    color: #679436;
+}
+
+.nav-elements a{
+    color: #A5BE00;
+}
+
+.nav-elements a:hover {
+    color: #E7EB90
+}
+
+.nav-links {
+  padding: 15px 25px;
+}
+
+/* main content */
+.main-content {
+  padding: 5rem;
+  flex-grow: 1;
+  width: 100%;
+  max-width: 1200px;
+  margin: auto;
+  overflow-y: auto;
+  /* box-shadow: 0 0 10px rgba(0,0,0,0.09); */
+  /* border-radius: 8px; */
+}
+
+.cell-list {
+  padding: 4rem 2rem;
+  background-color: #f9f9f9;
+  text-align: center;
+}
+
+
+
+/* Hero Section */
+.hero-section {
+  padding: 4rem 2rem;
+  background: white;
+  text-align: center;
+  color: #05668D;
+  border-bottom: 1px solid #ddd;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+.hero-section h1 {
+  font-size: 2.8rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* Grid Section */
+.grid-section {
+  background: #fafafa;
+  padding: 3rem 1.5rem;
+}
+
+/* Grid Container */
+.grid-card {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.8rem;
+  padding: 0 1rem;
+}
+
+/* Links */
+.grid-card a {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+/* Cell Cards with bottom border */
+.cell-card {
+  background: white;
+  padding: 1.8rem 1.2rem;
+  border-bottom: 3px solid transparent;
+  transition: border-color 0.3s ease;
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.grid-card a:hover .cell-card,
+.grid-card a:focus .cell-card {
+  border-bottom-color: #0077ff;
+}
+
+/* Headings */
+.cell-card h3 {
+  margin-bottom: 1rem;
+  font-weight: 600;
+  font-size: 1.3rem;
+  color: #111;
+}
+
+/* Paragraphs */
+.cell-card p {
+  margin-bottom: 0.5rem;
+  color: #555;
+  font-size: 1rem;
+}
+
+.cell-card strong {
+  color: #333;
+}

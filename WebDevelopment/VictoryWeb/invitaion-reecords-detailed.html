@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Invitation Records</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin:0; background:#f2f2f2; color:#333; }
+    header { background:#8e2de2; color:white; padding:1rem; text-align:center; }
+    nav { background:#4a00e0; padding:0.5rem; }
+    nav ul { display:flex; justify-content:center; list-style:none; margin:0; padding:0; gap:1rem; }
+    nav a { color:white; text-decoration:none; padding:6px 12px; border-radius:4px; }
+    nav a:hover, nav a.active { background:#6a1b9a; }
+    .container { max-width:700px; margin:2rem auto; background:white; padding:2rem; border-radius:10px; box-shadow:0 0 8px rgba(0,0,0,0.1); }
+    h2 { text-align:center; color:#4a00e0; }
+    .filters { display:flex; flex-wrap:wrap; justify-content:center; gap:1rem; margin-bottom:2rem; }
+    .filters > div { min-width:120px; }
+    label { display:block; font-weight:bold; margin-bottom:0.3rem; }
+    select { padding:6px; border-radius:5px; font-size:1rem; width:100%; box-sizing:border-box; }
+    canvas { display:block; margin:auto; max-width:100%; height:300px!important; }
+    #summary { text-align:center; margin-top:1rem; font-weight:bold; font-size:1.2rem; }
+  </style>
+</head>
+<body>
+
+<header><h1>Victory Fellowship</h1></header>
+<nav>
+  <ul>
+    <li><a href="#">Home</a></li>
+    <li><a href="#">Announcements</a></li>
+    <li><a href="#">Meetings</a></li>
+    <li><a href="#">Cells</a></li>
+    <li><a href="#" class="active">Records</a></li>
+    <li><a href="#">Profile</a></li>
+  </ul>
+</nav>
+
+<main class="container">
+  <h2>Invitation Records</h2>
+
+  <div class="filters">
+    <div><label for="yearSelect">Year:</label><select id="yearSelect"></select></div>
+    <div><label for="viewSelect">View by:</label>
+      <select id="viewSelect">
+        <option value="year">Year</option>
+        <option value="month" selected>Month</option>
+      </select>
+    </div>
+    <div id="monthDiv"><label for="monthSelect">Month:</label><select id="monthSelect"></select></div>
+    <div id="weekDiv" style="display:none;"><label for="weekSelect">Week in Month:</label><select id="weekSelect"></select></div>
+  </div>
+
+  <canvas id="invitationChart"></canvas>
+  <div id="summary">Honored: 0 &nbsp;&nbsp;&nbsp; Not Honored: 0</div>
+</main>
+
+<script>
+  const invitationData = {
+    "2025": {
+      year: { honored: 350, notHonored: 120 },
+      month: {
+        January: { honored: 40, notHonored: 20, weeks: {
+          "Week 1": { honored: 10, notHonored: 5 },
+          "Week 2": { honored: 15, notHonored: 10 }
+        }},
+        February: { honored: 35, notHonored: 25, weeks: {
+          "Week 1": { honored: 12, notHonored: 7 },
+          "Week 2": { honored: 23, notHonored: 18 }
+        }},
+        March: { honored: 45, notHonored: 15, weeks: {
+          "Week 1": { honored: 20, notHonored: 7 },
+          "Week 2": { honored: 25, notHonored: 8 }
+        }}
+      }
+    }
+  };
+
+  const yearSelect = document.getElementById('yearSelect');
+  const viewSelect = document.getElementById('viewSelect');
+  const monthSelect = document.getElementById('monthSelect');
+  const weekSelect = document.getElementById('weekSelect');
+  const monthDiv = document.getElementById('monthDiv');
+  const weekDiv = document.getElementById('weekDiv');
+  const summaryDiv = document.getElementById('summary');
+  const ctx = document.getElementById('invitationChart').getContext('2d');
+  let chart;
+
+  function populateYears() {
+    yearSelect.innerHTML = '';
+    Object.keys(invitationData).sort((a,b)=>b-a).forEach(y => {
+      yearSelect.append(new Option(y,y));
+    });
+  }
+
+  function populateMonths() {
+    monthSelect.innerHTML = '';
+    const ym = invitationData[yearSelect.value]?.month || {};
+    Object.keys(ym).forEach(m => monthSelect.append(new Option(m,m)));
+  }
+
+  function populateWeeks() {
+    weekSelect.innerHTML = '';
+    const wks = invitationData[yearSelect.value]?.month?.[monthSelect.value]?.weeks || {};
+    Object.keys(wks).forEach(w => weekSelect.append(new Option(w,w)));
+  }
+
+  function updateFilters() {
+    monthDiv.style.display = (viewSelect.value==='month')?'block':'none';
+    weekDiv.style.display = (viewSelect.value==='month' && weekSelect.options.length > 0)?'block':'none';
+  }
+
+  function getCounts() {
+    const year = yearSelect.value;
+    if (viewSelect.value==='year') {
+      return invitationData[year]?.year || {honored:0, notHonored:0};
+    } else {
+      const monthData = invitationData[year]?.month?.[monthSelect.value] || {honored:0, notHonored:0, weeks:{}};
+      if (weekSelect.value && invitationData[year].month[monthSelect.value].weeks[weekSelect.value]) {
+        return invitationData[year].month[monthSelect.value].weeks[weekSelect.value];
+      }
+      return monthData;
+    }
+  }
+
+  function render() {
+    const cnt = getCounts();
+    summaryDiv.textContent = `Honored: ${cnt.honored}   Not Honored: ${cnt.notHonored}`;
+
+    const data = {
+      labels: ['Honored','Not Honored'],
+      datasets: [{ data:[cnt.honored, cnt.notHonored],
+        backgroundColor:['#4CAF50','#F44336'], borderColor:'#fff', borderWidth:2 }]
+    };
+    const opts = {
+      responsive:true,
+      plugins:{ legend:{ position:'bottom' },
+        tooltip:{ callbacks:{ label:ctx => {
+          const total = ctx.dataset.data.reduce((a,b)=>a+b,0);
+          const perc = total?((ctx.raw/total)*100).toFixed(1):0;
+          return `${ctx.label}: ${ctx.raw} (${perc}%)`;
+        }}}}
+    };
+    if(chart) chart.destroy();
+    chart = new Chart(ctx,{type:'pie', data, options:opts});
+  }
+
+  yearSelect.addEventListener('change',()=>{
+    populateMonths(); populateWeeks(); updateFilters(); render();
+  });
+
+  viewSelect.addEventListener('change',()=>{
+    populateMonths(); populateWeeks(); updateFilters(); render();
+  });
+
+  monthSelect.addEventListener('change',()=>{
+    populateWeeks(); updateFilters(); render();
+  });
+
+  weekSelect.addEventListener('change',render);
+
+  function init(){
+    populateYears();
+    populateMonths();
+    populateWeeks();
+    updateFilters();
+    render();
+  }
+  init();
+</script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Victory Fellowship/title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- <header>
+        <h1>Victory Fellowship</h1>
+    </header> -->
+    <div class="container">
+        <form id="signInForm" class="fellowshipForm">
+            <h2>Sign In</h2>
+            <label for="signin-email">Email</label>
+            <input type="email" id="signin-email" required>
+
+            <div class="passwordSection">
+                <label for="signup-password">Password</label>
+                <input type="password" id="signup-password" minlength="8" maxlength="15" placeholder="password must be 8-15 characters long" required>
+                <h4 class="resetPassword" id="resetPassword">Forgot password?</h4>
+            </div>
+
+            <button type="submit" class="signUp">Sign In</button>
+            <h3 class="signInPrompt">Don't have an account? 
+                <span id="signUpLink"><a href="signUp.html">Sign Up</a></span>
+            </h3>
+        </form>
+        <div id="auth-message"></div>
+    </div>
+</body>
+</html>
+
+<!--     
+    <script>
+        const signInForm = document.getElementById('signInForm');
+        const authMessage = document.getElementById('auth-message');
+
+        // Dummy in-memory user check for demonstration
+        // In production, replace with real authentication
+        signInForm.onsubmit = function(e) {
+            e.preventDefault();
+            const email = document.getElementById('signin-email').value.trim();
+            const password = document.getElementById('signin-password').value;
+            // Example: always fail (since no backend)
+            authMessage.textContent = "Sign in functionality is for demonstration only.";
+            authMessage.style.color = "orange";
+            signInForm.reset();
+        };
+    </script> 
+-->
