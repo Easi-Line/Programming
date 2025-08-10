@@ -1,3 +1,16 @@
+/*  
+    Name: Akumatey Cyril Stevenson  
+    Index Number: 6134524  
+    Program: Savings Plan Calculator  
+    Description: This program uses a class to manage a user's savings plan.  
+                 It allows users to set a savings goal, make deposits, track progress,  
+                 and perform financial calculations such as computing the total accumulated  
+                 amount from periodic deposits with interest, or determining the required  
+                 deposit per period to reach a target amount.  
+*/
+
+
+
 #include <iostream>
 #include <cmath>
 #include <string>

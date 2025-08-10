@@ -1,9 +1,11 @@
-// Name: Akumatey Cyril Stevenson
-// Program: Bank Account Management
-// Description: This program uses a class to manage up to 10 bank accounts.
-//              It allows creating accounts, depositing, withdrawing, applying
-//              interest, and viewing account details.
-// Note: I'm still learning classes and functions. This is my practical attempt.
+/*  
+    Name: Akumatey Cyril Stevenson
+    Index Number: 6134524
+    Program: Bank Account Management
+    Description: This program uses a class to manage up to 10 bank accounts.
+                  It allows creating accounts, depositing, withdrawing, applying
+                  interest, and viewing account details.
+*/
 
 #include <iostream>
 #include <string>
